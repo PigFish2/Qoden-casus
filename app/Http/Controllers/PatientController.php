@@ -9,12 +9,11 @@ use Illuminate\Http\Response;
 class PatientController extends Controller
 {
     public function index() {
-        $patients = Patient::all();
+        $perPage = request('per_page', 10); // Allow client to specify per_page, default is 10
+        $patients = Patient::paginate($perPage);
 
         // Return all patients with 200 OK status
-        return response()->json([
-            'data' => $patients
-        ], Response::HTTP_OK);
+        return response()->json($patients, Response::HTTP_OK);
     }
 
     public function show($id) {
@@ -28,8 +27,6 @@ class PatientController extends Controller
         }
 
         // Return the patient data with a 200 OK status
-        return response()->json([
-            'data' => $patient
-        ], Response::HTTP_OK);
+        return response()->json($patient, Response::HTTP_OK);
     }
 }
